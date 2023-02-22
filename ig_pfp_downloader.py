@@ -35,11 +35,17 @@ def downloadProfilePicture(username, username_input, password_input):
 
     response = requests.get(profile_picture_url)
     if response.status_code == 200:
-        with open(f"{username}.jpg", "wb") as f:
-            f.write(response.content)
-            print(f"Profile picture of {username} successfully saved!")
-    else:
-        print(f"Could not download profile picture of {username}. Response status code: {response.status_code}")
+        i = 1
+        while True:
+            if os.path.exists(f"{username}({i}).jpg"):
+                i += 1
+            else:
+                with open(f"{username}({i}).jpg", "wb") as f:
+                    f.write(response.content)
+                    print(f"Profile picture of {username} successfully saved as {username}({i}).jpg!")
+                    break
+        else:
+            print(f"Could not download profile picture of {username}. Response status code: {response.status_code}")
 
 username_input, password_input = getCredentials()
 username = input("Enter the username of an account whose pfp you want to download: ")
